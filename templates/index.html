@@ -8,16 +8,12 @@
 </head>
 <body>
 
-
-<div id="square" class="resizable"
-    style="width: 100px; height: 100px; background-color: blue;"
-    onmousedown="startDrag(event)">
-</div>
-
-
-
 <!-- Only trigger hx-post and hx-vals when mouseup occurs -->
-<div id="resize" hx-post="/resize" hx-trigger="click" hx-target="#square" hx-vals='js:{"width": $width, "height": $height}'></div>
+<div hx-post="/resize" hx-trigger="click" hx-target="#square" hx-vals='js:{"width": $width, "height": $height}' hx-swap:"outerHTML">
+    <div id="square" onmousedown="startDrag(event)">
+        <div style="width: 100px; height: 100px; background-color: blue;"></div>
+    </div>
+</div>
 
 
 <script src="https://cdn.jsdelivr.net/npm/htmx.org@1.5.0/dist/htmx.js"></script>
@@ -35,13 +31,13 @@
     function stopDrag() {
         console.log('Mouse up event occurred');
         document.removeEventListener('mouseup', stopDrag);
-        var resize = document.getElementById('resize');
+        var square = document.getElementById('square');
         var newWidth = Math.abs(event.clientX - initialX) + 'px';
         var newHeight = Math.abs(event.clientY - initialY) + 'px';
         $width = newWidth;   // Update $width with the new width
         $height = newHeight; // Update $height with the new height
         console.log('Resized dimensions:', 'width:', $width, 'height:', $height);
-        resize.click(); // Trigger HTMX request
+        square.click(); // Trigger HTMX request
     }
 
 
